@@ -8,9 +8,17 @@ const {
 const authenticateToken = require("./../middleware/jwtMiddleware");
 const caslMiddleware = require("../middleware/caslMiddleware");
 const router = express.Router();
+const validate = require("../middleware/validationMiddleware");
+const { bookSchema } = require("../validation/userValidation");
 
 router.get("/", authenticateToken, caslMiddleware, getAllBooks);
-router.post("/", authenticateToken, caslMiddleware, createBook);
+router.post(
+  "/",
+  authenticateToken,
+  caslMiddleware,
+  validate(bookSchema),
+  createBook
+);
 router.patch(
   "/:bookId/approve",
   authenticateToken,

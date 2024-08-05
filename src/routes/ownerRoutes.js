@@ -4,8 +4,8 @@ const authenticateToken = require('./../middleware/jwtMiddleware')
 const caslMiddleware = require('../middleware/caslMiddleware');
 const router = express.Router();
 
-router.get('/', caslMiddleware, authenticateToken, getAllOwners);
-router.patch('/:ownerId/approve', caslMiddleware, authenticateToken, approveOwner);
-router.patch('/:ownerId/disable', caslMiddleware, authenticateToken, disableOwner);
+router.get('/', authenticateToken, caslMiddleware, getAllOwners);
+router.patch('/:ownerId/approve',  authenticateToken, caslMiddleware, approveOwner);
+router.patch('/:ownerId/disable', authenticateToken, caslMiddleware, disableOwner);
 
 module.exports = router;

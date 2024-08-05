@@ -1,11 +1,12 @@
 const express = require('express');
-const { sequelize } = require('./models');
+const { sequelize, User } = require('./models/index');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bookRoutes = require('./routes/bookRoutes');
 const ownerRoutes = require('./routes/ownerRoutes');
 const userRoutes = require('./routes/userRoutes');
 require('dotenv').config();
+const bcrypt = require("bcrypt");
 
 const app = express();
 
@@ -36,8 +37,22 @@ app.use((err, req, res, next) => {
     res.status(500).send('Server Error');
 });
 
-sequelize.sync({ alter: true }).then(() => {
+async function createAdmin() {
+    const hashedPassword = await bcrypt.hash("admin", 10);
+    const newUser = await User.create({
+      username: "admin",
+      password: hashedPassword,
+      email: "admin@email.com",
+      role: "admin",
+      status: "active",
+      isApproved: true,
+    });
+    console.log(newUser);
+}
+
+sequelize.sync({ force: true }).then(() => {
     app.listen(port, () => {
+        createAdmin();
         console.log(`Server running on ${SERVER_HOST}:${SERVER_PORT}`);
     });
 }).catch(err => {

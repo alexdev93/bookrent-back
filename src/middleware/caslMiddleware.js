@@ -7,11 +7,11 @@ function defineAbilitiesFor(user) {
         can('manage', 'all');
         can('approve', 'User', { role: 'owner' });
         can('approve', 'Book');
-    } else if (user.role === 'owner' && user.isApproved) {
+    } else if (user.role === 'owner') {
         can('read', 'Book', { ownerId: user.id });
         can('update', 'Book', { ownerId: user.id });
         can('delete', 'Book', { ownerId: user.id });
-        can('create', 'Book');
+        can("create", "Book");
     } else if (user.role === 'renter') {
         can('read', 'Book', { status: 'approved', isApproved: true });
         can('create', 'Rental');
@@ -23,7 +23,8 @@ function defineAbilitiesFor(user) {
     return build();
 }
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
     req.ability = await defineAbilitiesFor(req.user);
+    console.log(req.ability)
     next();
 }

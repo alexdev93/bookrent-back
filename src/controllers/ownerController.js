@@ -1,4 +1,4 @@
-const { Owner } = require('../models');
+const { User } = require('../models');
 const { ForbiddenError } = require('@casl/ability');
 
 const getAllOwners = async (req, res) => {
@@ -18,10 +18,10 @@ const approveOwner = async (req, res) => {
         // Check permissions
         ForbiddenError.from(req.ability).throwUnlessCan('update', 'Owner');
 
-        const owner = await Owner.findByPk(req.params.ownerId);
+        const owner = await User.findByPk(req.params.ownerId);
         if (!owner) return res.status(404).json({ message: 'Owner not found' });
 
-        owner.approved = true;
+        owner.isApproved = true;
         await owner.save();
         res.json(owner);
     } catch (error) {
@@ -34,7 +34,7 @@ const disableOwner = async (req, res) => {
         // Check permissions
         ForbiddenError.from(req.ability).throwUnlessCan('update', 'Owner');
 
-        const owner = await Owner.findByPk(req.params.ownerId);
+        const owner = await User.findByPk(req.params.ownerId);
         if (!owner) return res.status(404).json({ message: 'Owner not found' });
 
         owner.status = 'disabled';

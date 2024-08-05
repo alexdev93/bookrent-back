@@ -15,10 +15,8 @@ const getAllBooks = async (req, res) => {
 
 const createBook = async (req, res) => {
   try {
-    // Check permissions
     ForbiddenError.from(req.ability).throwUnlessCan("create", "Book");
 
-    // Create a new book
     const newBook = await Book.create({
       ...req.body,
       ownerId: req.user.id,
@@ -38,7 +36,6 @@ const createBook = async (req, res) => {
 
 const approveBook = async (req, res) => {
   try {
-    // Check permissions
     ForbiddenError.from(req.ability).throwUnlessCan("update", "Book");
 
     const book = await Book.findByPk(req.params.bookId);
@@ -54,7 +51,6 @@ const approveBook = async (req, res) => {
 
 const disableBook = async (req, res) => {
   try {
-    // Check permissions
     ForbiddenError.from(req.ability).throwUnlessCan("update", "Book");
 
     const book = await Book.findByPk(req.params.bookId);

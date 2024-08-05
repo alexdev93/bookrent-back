@@ -31,7 +31,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, role: user.role, approve: user.isApproved },
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
@@ -76,4 +76,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getUserProfile };
+module.exports = { register, login, getUserProfile, deleteUser };

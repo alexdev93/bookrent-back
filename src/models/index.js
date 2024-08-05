@@ -7,25 +7,32 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'postgres',
 });
 
-// Import models
-const User = require('./user')(sequelize, Sequelize.DataTypes);
-const Owner = require('./owner')(sequelize, Sequelize.DataTypes);
-const Book = require('./book')(sequelize, Sequelize.DataTypes);
+const User = require('./user')(sequelize);
+const Book = require('./book')(sequelize);
+const Category = require('./category')(sequelize);
+const Rental = require('./rental')(sequelize);
+const Wallet = require('./wallet')(sequelize);
 
-// Define model associations
-Owner.hasMany(Book, { foreignKey: 'ownerId' });
-Book.belongsTo(Owner, { foreignKey: 'ownerId' });
+User.hasMany(Book, { foreignKey: 'ownerId' });
+Book.belongsTo(User, { foreignKey: 'ownerId' });
 
-// // Sync database (create tables if they don't exist)
-// sequelize.sync({ alter: true }).then(() => {
-//     console.log('Database synchronized');
-// }).catch((error) => {
-//     console.error('Error syncing database:', error);
-// });
+Book.belongsTo(Category, { foreignKey: 'category' });
+Category.hasMany(Book, { foreignKey: 'category' });
+
+Book.hasMany(Rental, { foreignKey: 'bookId' });
+Rental.belongsTo(Book, { foreignKey: 'bookId' });
+
+User.hasOne(Wallet, { foreignKey: 'ownerId' });
+Wallet.belongsTo(User, { foreignKey: 'ownerId' });
+
+User.hasMany(Rental, { foreignKey: 'renterId' });
+Rental.belongsTo(User, { foreignKey: 'renterId' });
 
 module.exports = {
     sequelize,
     User,
-    Owner,
+    Rental,
     Book,
+    Wallet,
+    Category,
 };

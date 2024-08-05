@@ -5,8 +5,8 @@ const caslMiddleware = require('../middleware/caslMiddleware');
 const router = express.Router();
 
 router.get('/', authenticateToken, caslMiddleware, getAllBooks);
-router.post('/', caslMiddleware, authenticateToken, createBook);
-router.patch('/:bookId/approve', caslMiddleware, authenticateToken, approveBook);
-router.patch('/:bookId/disable', caslMiddleware, authenticateToken, disableBook);
+router.post('/', authenticateToken, caslMiddleware, createBook);
+router.patch('/:bookId/approve', authenticateToken, caslMiddleware, approveBook);
+router.patch('/:bookId/disable', authenticateToken, caslMiddleware, disableBook);
 
 module.exports = router;

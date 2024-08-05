@@ -23,7 +23,4 @@ function defineAbilitiesFor(user) {
     return build();
 }
 
-module.exports = async (req, res) => {
-    req.ability = await defineAbilitiesFor(req.user);
-    next();
-}
+module.exports = defineAbilitiesFor;

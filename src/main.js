@@ -7,6 +7,8 @@ const ownerRoutes = require("./routes/ownerRoutes");
 const userRoutes = require("./routes/userRoutes");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger_output.json");
 
 const app = express();
 
@@ -21,6 +23,7 @@ app.use(bodyParser.json());
 app.use("/api/books", bookRoutes);
 app.use("/api/owners", ownerRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const { SERVER_HOST, SERVER_PORT } = process.env;
 const port = SERVER_PORT || 9090;

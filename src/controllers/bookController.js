@@ -17,9 +17,19 @@ const createBook = async (req, res) => {
   try {
     ForbiddenError.from(req.ability).throwUnlessCan("create", "Book");
 
+    const category = await Category.findOne({
+      where: { name: req.body.category },
+    });
+    console.log(category);
+    
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
     const newBook = await Book.create({
       ...req.body,
       ownerId: req.user.id,
+      categoryId: category.id,
     });
 
     res.status(201).json(newBook);

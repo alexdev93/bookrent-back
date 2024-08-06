@@ -12,10 +12,14 @@ const sequelize = new Sequelize(
   }
 );
 
+const Category = require("./category")(sequelize);
 const User = require("./user")(sequelize);
 const Book = require("./book")(sequelize);
 const Rental = require("./rental")(sequelize);
 const Wallet = require("./wallet")(sequelize);
+
+Category.hasMany(Book, { foreignKey: "categoryId" });
+Book.belongsTo(Category, { foreignKey: "categoryId" });
 
 User.hasMany(Book, { foreignKey: "ownerId" });
 Book.belongsTo(User, { foreignKey: "ownerId" });
@@ -32,6 +36,7 @@ Rental.belongsTo(User, { foreignKey: "renterId" });
 module.exports = {
   sequelize,
   User,
+  Category,
   Rental,
   Book,
   Wallet,

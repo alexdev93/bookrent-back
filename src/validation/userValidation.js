@@ -2,9 +2,12 @@ const { z } = require("zod");
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters long"),
-  email: z.string().email(),
+  email: z.string().email().optional(),
   password: z.string().min(3, "Password must be at least 6 characters long"),
-  location: z.string().min(2, "location must have above two charachters"),
+  location: z
+    .string()
+    .min(2, "location must have above two charachters")
+    .optional(),
   role: z.enum(["admin", "owner", "renter"]),
 });
 
@@ -18,15 +21,11 @@ const bookSchema = z.object({
   author: z.string().min(1, "Author is required"),
   category: z.string().min(1, "Category is required"),
   isApproved: z.boolean().optional(),
-  ownerId: z
-    .number()
-    .int()
-    .min(1, "Owner ID is required and should be a positive integer"),
 });
 
 const userSchema = z.object({
   username: z.string().min(1, "Username is required"),
-  email: z.string().email("Invalid email format").optional(), // Optional, as it can be null
+  email: z.string().email("Invalid email format").optional(),
   password: z.string().min(8, "Password must be at least 8 characters long"),
   role: z.enum(["admin", "owner", "renter"], "Invalid role"),
   status: z.enum(["active", "disabled"], "Invalid status"),
@@ -37,5 +36,5 @@ module.exports = {
   registerSchema,
   loginSchema,
   bookSchema,
-  userSchema
+  userSchema,
 };

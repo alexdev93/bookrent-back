@@ -4,6 +4,7 @@ const {
   createBook,
   approveBook,
   disableBook,
+  getFilteredBooks,
 } = require("./../controllers/bookController");
 const authenticateToken = require("./../middleware/jwtMiddleware");
 const caslMiddleware = require("../middleware/caslMiddleware");
@@ -19,6 +20,7 @@ router.post(
   validate(bookSchema),
   createBook
 );
+router.get("/", authenticateToken, caslMiddleware, getFilteredBooks);
 router.patch(
   "/:bookId/approve",
   authenticateToken,

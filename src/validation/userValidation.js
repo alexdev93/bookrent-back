@@ -2,7 +2,7 @@ const { z } = require("zod");
 
 const registerSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters long"),
-  email: z.string().email().optional(),
+  email: z.string().email(),
   password: z.string().min(3, "Password must be at least 6 characters long"),
   location: z
     .string()

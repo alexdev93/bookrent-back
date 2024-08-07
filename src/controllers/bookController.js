@@ -1,13 +1,36 @@
-const { Book, Category } = require("../models");
+const { Book, Category, User } = require("../models");
 const { ForbiddenError } = require("@casl/ability");
+const _ = require("lodash");
 
 const getAllBooks = async (req, res) => {
   try {
     const books =
       req.user.role === "admin"
-        ? await Book.findAll()
-        : await Book.findAll({ where: { ownerId: req.user.id } });
-    res.json(books);
+        ? await Book.findAll({ include: [Category, User] }) // Include associations
+        : await Book.findAll({
+            where: { ownerId: req.user.id },
+            include: [Category, User],
+          });
+    const mappedBooks = books.map((book) => ({
+      ..._.pick(book, [
+        "id",
+        "title",
+        "author",
+        "isApproved",
+        "status",
+        "price",
+        "createdAt",
+        "updatedAt",
+      ]),
+      category: {
+        ..._.pick(book.Category, ["id", "name"]),
+      },
+      owner: {
+        ..._.pick(book.User, ["id", "username", "email", "location"]),
+      },
+    }));
+
+    res.json(mappedBooks);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

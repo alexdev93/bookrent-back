@@ -15,7 +15,7 @@ const register = async (req, res) => {
     });
 
     const token = await jwt.sign(
-      { id: newUser.id, role: newUser.role, approve: newUser.isApproved },
+      { id: newUser.id, name: newUser.username, role: newUser.role, approve: newUser.isApproved },
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
@@ -34,12 +34,13 @@ const login = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ where: { username } });
+    const isPasswordValid = await !bcrypt.compare(password, user.password);
 
-    if (!user || !bcrypt.compare(password, user.password)) {
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign(
-      { id: user.id, role: user.role, approve: user.isApproved },
+      { id: user.id, name: user.username, role: user.role, approve: user.isApproved },
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",

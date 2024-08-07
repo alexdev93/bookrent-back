@@ -22,6 +22,16 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      status: {
+        type: DataTypes.ENUM("free", "rented"),
+        allowNull: false,
+        defaultValue: "free",
+      },
+      price: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        defaultValue: 0.00,
+      },
       isApproved: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

@@ -3,20 +3,23 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.PGDATABASE,
-  process.env.PGUSER,
-  process.env.PGPASSWORD,
+  process.env.PGDATABASE || 'bookrent',
+  process.env.PGUSER || 'postgres',
+  process.env.PGPASSWORD || '123',
   {
-    host: process.env.PGHOST,
-    dialect: "postgres",
+    host: process.env.PGHOST || 'localhost',
+    dialect: 'postgres',
+    port: process.env.PGPORT || 5432,
   }
 );
+
 
 const Category = require("./category")(sequelize);
 const User = require("./user")(sequelize);
 const Book = require("./book")(sequelize);
 const Rental = require("./rental")(sequelize);
 const Wallet = require("./wallet")(sequelize);
+const Transaction = require("./transaction")(sequelize);
 
 Category.hasMany(Book, { foreignKey: "categoryId" });
 Book.belongsTo(Category, { foreignKey: "categoryId" });
@@ -33,6 +36,9 @@ Wallet.belongsTo(User, { foreignKey: "ownerId" });
 User.hasMany(Rental, { foreignKey: "renterId" });
 Rental.belongsTo(User, { foreignKey: "renterId" });
 
+Wallet.hasMany(Transaction, { foreignKey: "walletId" });
+Transaction.belongsTo(Wallet, { foreignKey: "walletId" });
+
 module.exports = {
   sequelize,
   User,
@@ -40,4 +46,5 @@ module.exports = {
   Rental,
   Book,
   Wallet,
+  Transaction,
 };

@@ -6,7 +6,7 @@ const getAllBooks = async (req, res) => {
   try {
     const books =
       req.user.role === "admin"
-        ? await Book.findAll({ include: [Category, User] }) // Include associations
+        ? await Book.findAll({ include: [Category, User] }) 
         : await Book.findAll({
             where: { ownerId: req.user.id },
             include: [Category, User],
@@ -30,7 +30,7 @@ const getAllBooks = async (req, res) => {
       },
     }));
 
-    res.json(mappedBooks);
+    res.json(books);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -107,7 +107,7 @@ const getFilteredBooks = async (req, res) => {
     }
     if (author) {
       filterCriteria.author = {
-        [Op.iLike]: `%${author}%`, // Case-insensitive search for author
+        [Op.iLike]: `%${author}%`,
       };
     }
     if (ownerId) {

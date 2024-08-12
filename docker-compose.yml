@@ -2,22 +2,22 @@ version: '3.8'
 
 services:
 
-  backend:
-    image: backend
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: development
-    ports:
-      - 8080:8080
-      - 9229:9229
-    command: [ "node", "--inspect=0.0.0.0:9229", "index.js" ]
+  # backend:
+  #   image: backend
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   environment:
+  #     NODE_ENV: development
+  #   ports:
+  #     - 8080:8080
+  #     - 9229:9229
+  #   command: [ "node", "--inspect=0.0.0.0:9229", "index.js" ]
 
   bookrent:
     image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: 123
+      POSTGRES_PASSWORD: "123"
       POSTGRES_USER: postgres
       POSTGRES_DB: bookrent
     ports:

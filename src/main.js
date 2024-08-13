@@ -88,7 +88,7 @@ sequelize
   .sync({ force: false })
   .then(() => {
     app.listen(port, () => {
-      insertRandomTransactions();
+      // insertRandomTransactions();
       Category.bulkCreate(categories);
       console.log(`Server running on ${SERVER_HOST}:${SERVER_PORT}`);
     });

@@ -2,16 +2,16 @@ const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sequelize = new Sequelize(
-  process.env.PGDATABASE || 'bookrent',
-  process.env.PGUSER || 'postgres',
-  process.env.PGPASSWORD || '123',
-  {
-    host: process.env.PGHOST || 'localhost',
-    dialect: 'postgres',
-    port: process.env.PGPORT || 5432,
-  }
-);
+const sequelize = new Sequelize(process.env.POSTGRES_URL, {
+  dialect: "postgres",
+  ssl: true,
+  dialectOptions: {
+    ssl: {
+      require: true, // This will help to force SSL
+      rejectUnauthorized: false, // This line helps in case of self-signed certificates
+    },
+  },
+});
 
 
 const Category = require("./category")(sequelize);

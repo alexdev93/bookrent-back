@@ -29,6 +29,9 @@ app.use("/api/wallet", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/auths", authRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to Book Rent</h1>")
+})
 
 const { SERVER_HOST, SERVER_PORT } = process.env;
 const port = SERVER_PORT || 8080;
